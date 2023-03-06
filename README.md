@@ -4,6 +4,8 @@
 
 **推荐课程：**[W&M CSCI780-01 Spring 23 Computer Arch. Mdl and Sim (notion.site)](https://syifan.notion.site/W-M-CSCI780-01-Spring-23-Computer-Arch-Mdl-and-Sim-a5102523b841499dbbd0ff893f8495a6)
 
+**MGPUSim**: [Akita / MGPUSim · GitLab](https://gitlab.com/akita/mgpusim)
+
 **citation**:
 
 ```
@@ -24,4 +26,12 @@
     series = {ISCA '19} 
 }
 ```
+
+
+
+### 任务一：如何使用MGPUSim运行一个应用
+
+
+
+### 任务二：如何使用MGPUSim运行一个GNN workload
 
