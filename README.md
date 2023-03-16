@@ -27,7 +27,11 @@
 }
 ```
 
-
+> 遇到../runner/timingplatform.go:19:2: gitlab.com/akita/noc/v3@v3.0.0-alpha.9: Get "https://proxy.golang.org/gitlab.com/akita/noc/v3/@v/v3.0.0-alpha.9.zip": dial tcp 172.217.163.49:443: i/o timeout类的问题？
+>
+> ```go
+> go env -w GOPROXY=https://goproxy.io,direct
+> ```
 
 * **任务一：如何使用MGPUSim运行一个应用**
 
