@@ -6,7 +6,8 @@ Broadly, we wanted to focus on **how to improve the performance of irregular dat
 
 
 
-|   Date   |               Topic               |    Name     |               Additional Materials/Links               |
-| :------: | :-------------------------------: | :---------: | :----------------------------------------------------: |
-| 2023.3.9 | Efficient Multi-GPU Shared Memory | Zihang Chen | https://ieeexplore.ieee.org/abstract/document/9499752/ |
+|   Date    |                    Topic                    |    Name     |               Additional Materials/Links               |
+| :-------: | :-----------------------------------------: | :---------: | :----------------------------------------------------: |
+| 2023.3.9  |      Efficient Multi-GPU Shared Memory      | Zihang Chen | https://ieeexplore.ieee.org/abstract/document/9499752/ |
+| 2023.3.23 | Designing Virtual Memory System of MCM GPUs |  Tianao Ge  | https://ieeexplore.ieee.org/abstract/document/9923857  |
 
