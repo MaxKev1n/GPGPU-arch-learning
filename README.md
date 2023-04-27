@@ -41,3 +41,73 @@
 * **任务二：如何使用MGPUSim运行一个GNN workload**
 * **任务三：如何快速使用MGPUSim进行实验** ✅
 
+---
+
+## GCN
+
+**推荐阅读资料**：
+
+* https://tkipf.github.io/graph-convolutional-networks/
+
+
+
+**参考代码**：https://github.com/tkipf/pygcn
+
+**citation**
+
+```
+@article{kipf2016semi,
+  title={Semi-Supervised Classification with Graph Convolutional Networks},
+  author={Kipf, Thomas N and Welling, Max},
+  journal={arXiv preprint arXiv:1609.02907},
+  year={2016}
+}
+```
+
+
+
+---
+
+## CUDA
+
+> ⚠️在HPC上使用**vscode**时可能遇到c++扩展无法正确工作：
+>
+> 1. 根据系统安装cuda（以CUDA 12.1为例）
+>
+> ```
+> wget https://developer.download.nvidia.com/compute/cuda/12.1.1/local_installers/cuda_12.1.1_530.30.02_linux.run
+> ```
+>
+> ```
+> chmod 777 cuda_12.1.1_530.30.02_linux.run
+> ```
+>
+> ```
+> sh cuda_12.1.1_530.30.02_linux.run
+> ```
+>
+> 2. 修改vscode的`c_cpp_properties.json`
+>
+> ```json
+> {
+>     "configurations": [
+>         {
+>             "name": "Linux",
+>             "includePath": [
+>                 "${workspaceFolder}/**",
+>                 "/hpc/users/HKUST-GZ/zihangchen/cuda/cuda-11.4/include"
+>             ],
+>             "defines": [],
+>             "compilerPath": "/usr/bin/gcc",
+>             "cStandard": "c17",
+>             "cppStandard": "gnu++14",
+>             "intelliSenseMode": "linux-gcc-x64"
+>         }
+>     ],
+>     "version": 4
+> }
+> ```
+>
+> 
+>
+> **参考资料：**https://blog.csdn.net/qq_35082030/article/details/110387800
