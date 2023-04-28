@@ -110,4 +110,22 @@
 >
 > 
 >
-> **参考资料：**https://blog.csdn.net/qq_35082030/article/details/110387800
+> **参考资料**：https://blog.csdn.net/qq_35082030/article/details/110387800
+
+---
+
+### Rodinia
+
+**下载链接**：https://rodinia.cs.virginia.edu/doku.php?id=downloads
+
+> ⚠️在HPC上使用`Rodinia`时可能遇到无法正常运行：
+>
+> 修改`rodinia_3.1/common/make.config`第二行
+>
+> ```makefile
+> CUDA_DIR = /usr/local/cuda #original code
+> ```
+>
+> ```makefile
+> CUDA_DIR = /usr/local/cuda-11.4 #以module load cuda-11.4为例
+> ```
