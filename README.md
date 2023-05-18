@@ -114,7 +114,7 @@
 
 ---
 
-### Rodinia
+## Rodinia
 
 **下载链接**：https://rodinia.cs.virginia.edu/doku.php?id=downloads
 
@@ -129,3 +129,30 @@
 > ```makefile
 > CUDA_DIR = /usr/local/cuda-11.4 #以module load cuda-11.4为例
 > ```
+
+---
+
+## Performance Evaluation Methods
+
+**citation:**
+
+> Eeckhout, Lieven. “Computer Architecture Performance Evaluation Methods.” Synthesis Lectures on Computer Architecture, edited by Mark D Hill, Morgan & Claypool Publishers, 2010, doi:10.2200/S00273ED1V01Y201006CAC010.
+
+
+
+### STP
+
+We, first, define a program’s normalized progress as $NP_i=\frac{T_i^{SP}}{T_i^{MP}}$, with $T_i^{SP}$ and $T_i^{MP}$, the execution time undersingle-program mode (i.e.,the program runs in isolation) and multiprogram execution (i.e., the program co-runs with other programs), respectively. Given that a program runs slower under multiprogram execution, normalized progress is a value smaller than one. The intuitive understanding of normalized progress is that it represents a pro- gram’s progress during multiprogram execution. For example, an NP of 0.7 means that a program makes 7 milliseconds of single-program progress during a 10 millisecond time slice of multiprogram execution.
+
+​		System throughput (STP) is then defined as the sum of the normalized progress rates across all jobs in the multiprogram job mix: $STP=\sum_{i=1}^nNP_i=\sum_{i=1}^n\frac{T_i^{SP}}{T_i^{MP}}$.
+In other words, system throughput is the accumulated progress across all jobs, and thus it is a higher-is-better metric.
+
+
+
+### ANTT
+
+To define the average normalized turnaround time, we first define a program’s normalized turnaround time as $NTT_i=\frac{T_i^{MP}}{T_i^{SP}}$
+Normalized turnaround time quantifies the user-perceived slowdown during multiprogram execution relative to single-program execution, and typically is a value larger than one. NTT is the reciprocal of NP. The average normalized turnaround time is defined as the arithmetic average across the programs’ normalized turnaround times: $ANTT=\frac{1}{n}\sum_{i=1}^nNTT_i=\frac{1}{n}\sum_{i=1}^n\frac{T_i^{MP}}{T_i^{SP}}$
+ANTT is a lower-is-better metric. 
+
+---
