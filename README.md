@@ -156,3 +156,29 @@ Normalized turnaround time quantifies the user-perceived slowdown during multipr
 ANTT is a lower-is-better metric. 
 
 ---
+
+## Nsight Compute CLI
+
+**参考资料：** https://docs.nvidia.com/nsight-compute/NsightComputeCli/index.html#command-line-options-console-output
+
+
+
+### 如何查看kernel的occupancy
+
+```
+/usr/local/cuda/nsight-compute-2022.4.0/ncu --section Occupancy ./vecadd
+```
+
+![](nsight-compute-cli/occupancy.png)
+
+
+
+### 如何查看cuda代码对应的sass代码
+
+```
+/usr/local/cuda/nsight-compute-2022.4.0/ncu --page source --print-source cuda,sass ./vecadd
+```
+
+![](nsight-compute-cli/cuda-sass.png)
+
+---
