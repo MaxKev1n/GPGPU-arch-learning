@@ -157,28 +157,27 @@ ANTT is a lower-is-better metric.
 
 ---
 
-## Nsight Compute CLI
+## Nsight Compute
+
+### Nsight Compute UI
+
+**参考资料：** https://developer.nvidia.com/tools-overview/nsight-compute/get-started
+
+> **NCU 提供MacOS host版本**
+
+<img src="nsight-compute/nsight-compute-ui.png" style="zoom: 50%;" />
+
+* **任务一：如何生成Report并查看Source与PTX对应关系**✅
+
+
+
+### Nsight Compute CLI
 
 **参考资料：** https://docs.nvidia.com/nsight-compute/NsightComputeCli/index.html#command-line-options-console-output
 
 
 
-### 如何查看kernel的occupancy
+* **任务一：如何查看kernel的occupancy**✅
 
-```
-/usr/local/cuda/nsight-compute-2022.4.0/ncu --section Occupancy ./vecadd
-```
+* **任务二：如何查看cuda代码对应的sass代码**✅
 
-![](nsight-compute-cli/occupancy.png)
-
-
-
-### 如何查看cuda代码对应的sass代码
-
-```
-/usr/local/cuda/nsight-compute-2022.4.0/ncu --page source --print-source cuda,sass ./vecadd
-```
-
-![](nsight-compute-cli/cuda-sass.png)
-
----
