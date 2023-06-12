@@ -181,3 +181,10 @@ ANTT is a lower-is-better metric.
 
 * **任务二：如何查看cuda代码对应的sass代码**✅
 
+
+
+---
+
+## Occupancy
+
+* **任务一：如何在cuda代码中计算theoretical occupancy**✅
