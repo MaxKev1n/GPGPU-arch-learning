@@ -112,6 +112,10 @@
 >
 > **参考资料**：https://blog.csdn.net/qq_35082030/article/details/110387800
 
+
+
+* **任务一：** 使用`cuda toolkit`编译`vecaddLoop.cu`得到`vecaddLoop.ptx`✅
+
 ---
 
 ## Rodinia
