@@ -115,6 +115,8 @@
 
 
 * **任务一：** 使用`cuda toolkit`编译`vecaddLoop.cu`得到`vecaddLoop.ptx`✅
+* **任务二：** 理解`vecaddLoop.ptx`✅
+* **任务三：** 使用`asm()`对`cube.cu`中的kernel插入Inline PTX Assembly✅
 
 ---
 

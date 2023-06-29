@@ -67,5 +67,69 @@ gcc -D__CUDA_ARCH__=800 -D__CUDA_ARCH_LIST__=800 -E -x c++  -DCUDA_DOUBLE_MATH_F
 /usr/local/cuda/nvvm/bin/cicc --c++14 --gnu_version=90400 --display_error_number --orig_src_file_name "vecaddLoop.cu" --orig_src_path_name "/home/chenzihang/async_benchmarks/vecadd/vecaddLoop.cu" --allow_managed   -arch compute_80 -m64 --no-version-ident -ftz=0 -prec_div=1 -prec_sqrt=1 -fmad=1 --include_file_name "vecaddLoop.fatbin.c" -generate-line-info -tused --module_id_file_name "vecaddLoop.module_id" --gen_c_file_name "vecaddLoop.cudafe1.c" --stub_file_name "vecaddLoop.cudafe1.stub.c" --gen_device_file_name "vecaddLoop.cudafe1.gpu"  "vecaddLoop.cpp1.ii" -o "vecaddLoop.ptx"
 ```
 
+---
 
+**任务二：** 理解`vecaddLoop.ptx`
+
+
+
+**参考资料：** https://docs.nvidia.com/cuda/parallel-thread-execution/index.html#source-format
+
+---
+
+**任务三：** 使用`asm()`对`cube.cu`中的kernel插入Inline PTX Assembly
+
+
+
+**代码地址：** https://github.com/parcomp-group/async_benchmarks/blob/main/PTX-samples/cube.cu
+
+
+
+**参考资料：** 
+
+* https://docs.nvidia.com/cuda/inline-ptx-assembly/index.html
+
+* https://docs.nvidia.com/cuda/parallel-thread-execution/index.html#source-format
+
+  
+
+```
+__global__ void cube(float *d_in, float *d_out) {
+    int idx = threadIdx.x;
+    __shared__ float sdata[100];
+    sdata[idx] = d_in[idx];
+    __syncthreads();
+    d_out[idx] = sdata[idx] * sdata[idx] * sdata[idx];
+}
+```
+
+```
+__global__ void cubePTX(float *d_in, float *d_out) {
+    int idx;
+    asm(".shared .align 4 .b32 __smem[400];");
+    asm volatile("mov.u32 %0, %%tid.x;" : "=r"(idx));
+
+    float val;
+    asm volatile("ld.global.f32 %0, [%1];" : "=f"(val) : "l"(d_in + idx));
+
+    int idxInBytes;
+    asm volatile("shl.b32 %0, %1, 2;" : "=r"(idxInBytes) : "r"(idx));
+
+    int smem_addr;
+    asm volatile("mov.u32 %0, __smem;" : "=r"(smem_addr));
+
+    int smem_offset_addr;
+    asm volatile("add.s32 %0, %1, %2;" : "=r"(smem_offset_addr) : "r"(smem_addr), "r"(idxInBytes));
+    asm volatile("st.shared.f32 [%0], %1;" : : "r"(smem_offset_addr), "f"(val));
+    asm volatile("bar.sync 0;");
+
+    float val2;
+    asm volatile("ld.shared.f32 %0, [%1];" : "=f"(val2) : "r"(smem_offset_addr));
+
+    float temp1, temp2;
+    asm volatile("mul.f32 %0, %1, %2;" : "=f"(temp1) : "f"(val2), "f"(val2));
+    asm volatile("mul.f32 %0, %1, %2;" : "=f"(temp2) : "f"(temp1), "f"(val2));
+    asm volatile("st.global.f32 [%0], %1;" : : "l"(d_out + idx), "f"(temp2));
+}
+```
 
