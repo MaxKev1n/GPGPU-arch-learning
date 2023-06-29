@@ -91,7 +91,30 @@ gcc -D__CUDA_ARCH__=800 -D__CUDA_ARCH_LIST__=800 -E -x c++  -DCUDA_DOUBLE_MATH_F
 
 * https://docs.nvidia.com/cuda/parallel-thread-execution/index.html#source-format
 
-  
+
+
+
+### 以`ld.shared.f32`为例
+
+`ld`的一种常用语法格式为`ld.{ss}.type d, [a]`，意思为在指定状态空间中，从源地址操作数`a`指定的位置加载数据存储到寄存器变量`d`
+
+* 常用`ss`包括`const`， `global`， `shared`以及 `param`等
+* 常用`type`包括`b8`，`u32`，`s64`，`f32`等
+
+因此，`ld.shared.f32 %0, [%1]`的意思为从地址为`%1`的内存空间取一个`f32`的值存储到`%0`寄存器中。`asm()`函数的格式为`asm("template-string" : "constraint"(output) : "constraint"(input));`。函数中的`template-string`为需要插入的PTX指令，`constraint`则是对于插入的PTX指令中的变量类型的描述。例如，给定代码中的`=f`意为`.f32`类型的寄存器并且允许写入（如果为`+f`，则意为可读可写）。因此，`asm volatile("ld.shared.f32 %0, [%1];" : "=f"(val2) : "r"(smem_offset_addr));`意为从以`smem_offset_addr`为地址的shared memory内存空间中取出`f32`类型的值并存储到`val2`中。值得注意的是，为了避免编译器对所写PTX指令的优化，可以在`asm`关键字后加上`volatile`关键字。
+
+```
+float val2;
+int smem_offset_addr;
+asm volatile("ld.shared.f32 %0, [%1];" : "=f"(val2) : "r"(smem_offset_addr));
+```
+
+> 1. compiler前端并不会解析asm的template string，因此无法传递操作数修饰符
+> 2. 如果想要在PTX指令中使用`%`符号，则需要在asm中使用`%%`
+
+
+
+### 原始的Cube kernel代码以及修改后的代码
 
 ```
 __global__ void cube(float *d_in, float *d_out) {
@@ -132,4 +155,3 @@ __global__ void cubePTX(float *d_in, float *d_out) {
     asm volatile("st.global.f32 [%0], %1;" : : "l"(d_out + idx), "f"(temp2));
 }
 ```
-
