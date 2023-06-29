@@ -403,33 +403,33 @@ $L__BB0_17:
 	.reg .b64 	%rd<16>;
 	.loc	1 18 0
 	// demoted variable
-	.shared .align 16 .b8 _ZZ22kernel_sync_multiblockILi256EEvPKdS1_PdmE12local_smem_a[2048];
+	.shared .align 16 .b8 _ZZ22kernel_sync_multiblockILi256EEvPKdS1_PdmE12local_smem_a[2048]; // local_smem_a[256 * 8]
 	// demoted variable
-	.shared .align 16 .b8 _ZZ22kernel_sync_multiblockILi256EEvPKdS1_PdmE12local_smem_b[2048];
+	.shared .align 16 .b8 _ZZ22kernel_sync_multiblockILi256EEvPKdS1_PdmE12local_smem_b[2048]; // local_smem_b
 
-	ld.param.u64 	%rd7, [_Z22kernel_sync_multiblockILi256EEvPKdS1_Pdm_param_0];
-	ld.param.u64 	%rd8, [_Z22kernel_sync_multiblockILi256EEvPKdS1_Pdm_param_1];
-	ld.param.u64 	%rd9, [_Z22kernel_sync_multiblockILi256EEvPKdS1_Pdm_param_2];
-	ld.param.u64 	%rd10, [_Z22kernel_sync_multiblockILi256EEvPKdS1_Pdm_param_3];
+	ld.param.u64 	%rd7, [_Z22kernel_sync_multiblockILi256EEvPKdS1_Pdm_param_0]; // double *a
+	ld.param.u64 	%rd8, [_Z22kernel_sync_multiblockILi256EEvPKdS1_Pdm_param_1]; // double *b
+	ld.param.u64 	%rd9, [_Z22kernel_sync_multiblockILi256EEvPKdS1_Pdm_param_2]; // double *c
+	ld.param.u64 	%rd10, [_Z22kernel_sync_multiblockILi256EEvPKdS1_Pdm_param_3]; // N
 	.loc	1 19 22
-	mov.u32 	%r1, %ntid.x;
-	mov.u32 	%r9, %ctaid.x;
-	mov.u32 	%r2, %tid.x;
-	mad.lo.s32 	%r14, %r9, %r1, %r2;
+	mov.u32 	%r1, %ntid.x; // blockDim.x
+	mov.u32 	%r9, %ctaid.x; // blockIdx.x
+	mov.u32 	%r2, %tid.x; // threadIdx.x
+	mad.lo.s32 	%r14, %r9, %r1, %r2; // blockIdx.x * blockDim.x + threadIdx.x
 	.loc	1 24 5
 	cvt.s64.s32 	%rd15, %r14;
-	setp.ge.u64 	%p1, %rd15, %rd10;
-	@%p1 bra 	$L__BB1_3;
+	setp.ge.u64 	%p1, %rd15, %rd10; // %p1 = globalIdx >= N
+	@%p1 bra 	$L__BB1_3; // break
 
 	.loc	1 0 5
-	shl.b32 	%r10, %r2, 3;
+	shl.b32 	%r10, %r2, 3; // threadIdx.x * 8
 	mov.u32 	%r11, _ZZ22kernel_sync_multiblockILi256EEvPKdS1_PdmE12local_smem_a;
-	add.s32 	%r4, %r11, %r10;
+	add.s32 	%r4, %r11, %r10; // compute the address of local_smem_a[threadIdx.x]
 	mov.u32 	%r12, _ZZ22kernel_sync_multiblockILi256EEvPKdS1_PdmE12local_smem_b;
-	add.s32 	%r5, %r12, %r10;
+	add.s32 	%r5, %r12, %r10; // compute the address of local_smem_b[threadIdx.x]
 	.loc	1 31 9
 	mov.u32 	%r13, %nctaid.x;
-	mul.lo.s32 	%r6, %r1, %r13;
+	mul.lo.s32 	%r6, %r1, %r13; // blockDim.x * gridDim.x
 	.loc	1 19 22
 	cvta.to.global.u64 	%rd2, %rd7;
 	cvta.to.global.u64 	%rd3, %rd8;
@@ -437,32 +437,32 @@ $L__BB0_17:
 
 $L__BB1_2:
 	.loc	1 25 9
-	shl.b64 	%rd11, %rd15, 3;
-	add.s64 	%rd12, %rd2, %rd11;
-	ld.global.f64 	%fd1, [%rd12];
-	st.shared.f64 	[%r4], %fd1;
+	shl.b64 	%rd11, %rd15, 3; // globalIdx * 8
+	add.s64 	%rd12, %rd2, %rd11; // compute the address of a[globalIdx]
+	ld.global.f64 	%fd1, [%rd12]; // %fd1 = a[globalIdx]
+	st.shared.f64 	[%r4], %fd1; // local_smem_a[threadIdx.x] = a[globalIdx]
 	.loc	1 26 9
-	add.s64 	%rd13, %rd3, %rd11;
-	ld.global.f64 	%fd2, [%rd13];
-	st.shared.f64 	[%r5], %fd2;
+	add.s64 	%rd13, %rd3, %rd11; // compute the address of b[globalIdx]
+	ld.global.f64 	%fd2, [%rd13]; // %fd2 = b[globalIdx]
+	st.shared.f64 	[%r5], %fd2; // local_smem_b[threadIdx.x] = b[globalIdx]
 	.loc	1 28 9
-	bar.sync 	0;
+	bar.sync 	0; // sync threads in the block
 	.loc	1 29 9
-	ld.shared.f64 	%fd3, [%r5];
-	ld.shared.f64 	%fd4, [%r4];
-	add.f64 	%fd5, %fd4, %fd3;
-	add.s64 	%rd14, %rd4, %rd11;
-	st.global.f64 	[%rd14], %fd5;
+	ld.shared.f64 	%fd3, [%r5]; // %fd3 = local_smem_b[threadIdx.x]
+	ld.shared.f64 	%fd4, [%r4]; // %fd4 = local_smem_a[threadIdx.x]
+	add.f64 	%fd5, %fd4, %fd3; // %fd5 = local_smem_a[threadIdx.x] + local_smem_b[threadIdx.x]
+	add.s64 	%rd14, %rd4, %rd11; // compute the address of c[globalIdx]
+	st.global.f64 	[%rd14], %fd5; // c[globalIdx] = %fd5
 	.loc	1 31 9
-	add.s32 	%r14, %r14, %r6;
+	add.s32 	%r14, %r14, %r6; // globalIdx += blockDim.x * gridDim.x
 	.loc	1 24 5
 	cvt.s64.s32 	%rd15, %r14;
-	setp.lt.u64 	%p2, %rd15, %rd10;
-	@%p2 bra 	$L__BB1_2;
+	setp.lt.u64 	%p2, %rd15, %rd10; // %p2 = globalIdx < N
+	@%p2 bra 	$L__BB1_2; // jump to loop header if globalIdx < N
 
 $L__BB1_3:
 	.loc	1 33 1
-	ret;
+	ret; // return
 
 }
 	// .globl	_ZN3cub11EmptyKernelIvEEvv
