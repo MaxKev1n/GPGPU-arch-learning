@@ -52,24 +52,24 @@
 	.loc	1 44 16
 	mov.u32 	%r1, %ntid.x;
 	mov.u32 	%r13, %ctaid.x;
-	mul.lo.s32 	%r14, %r13, %r1;
+	mul.lo.s32 	%r14, %r13, %r1; // offset
 	.loc	1 45 22
 	mov.u32 	%r15, %tid.x;
-	add.s32 	%r70, %r14, %r15;
+	add.s32 	%r70, %r14, %r15; // global_index
 	.loc	1 46 19
-	add.s32 	%r16, %r14, 256;
+	add.s32 	%r16, %r14, 256; // offset + BLOCKSIZE
 	cvt.s64.s32 	%rd28, %r16;
-	setp.lt.u64 	%p4, %rd28, %rd26;
+	setp.lt.u64 	%p4, %rd28, %rd26; // (offset + BLOCKSIZE < N) ?
 	cvt.u64.u32 	%rd29, %r14;
-	sub.s64 	%rd30, %rd26, %rd29;
-	selp.b64 	%rd31, 256, %rd30, %p4;
+	sub.s64 	%rd30, %rd26, %rd29; // N - offset
+	selp.b64 	%rd31, 256, %rd30, %p4; // fetchsize = (offset + BLOCKSIZE < N) ? BLOCKSIZE : N - offset
 	cvt.u32.u64 	%r17, %rd31;
 	.loc	1 47 5
-	setp.gt.s32 	%p5, %r17, 0;
+	setp.gt.s32 	%p5, %r17, 0; // fetchsize >= 0 ? fetchsize : 0;
 	.loc	1 49 5
 	cvt.s64.s32 	%rd1, %r14;
-	and.b64  	%rd32, %rd31, 4294967295;
-	selp.b64 	%rd2, %rd32, 0, %p5;
+	and.b64  	%rd32, %rd31, 4294967295; // ??? %rd32 = offset & 0xffffffff
+	selp.b64 	%rd2, %rd32, 0, %p5; // %rd2 = fetchsize >= 0 ? %rd32 : 0;
 	.loc	1 49 5
 	.loc	2 396 5, function_name $L__info_string0, inlined_at 1 49 5
 	.loc	2 356 5, function_name $L__info_string1, inlined_at 2 396 5
@@ -79,19 +79,19 @@
 	.loc	3 614 16, function_name $L__info_string5, inlined_at 2 182 27
 	.loc	4 118 20, function_name $L__info_string6, inlined_at 3 614 16
 	.loc	4 92 13, function_name $L__info_string7, inlined_at 4 118 20
-	mov.u32 	%r18, %ntid.y;
-	mul.lo.s32 	%r19, %r1, %r18;
-	mov.u32 	%r20, %ntid.z;
-	mul.lo.s32 	%r3, %r19, %r20;
+	mov.u32 	%r18, %ntid.y; // blockDim.y #=1
+	mul.lo.s32 	%r19, %r1, %r18; // blockDim.x * blockDim.y #=blockDim.x
+	mov.u32 	%r20, %ntid.z; // blockDim.z #=1
+	mul.lo.s32 	%r3, %r19, %r20; // blockDim.x * blockDim.y * blockDim.z #=blockDim.x
 	.loc	2 183 25, function_name $L__info_string4, inlined_at 2 298 9
 	.loc	3 618 16, function_name $L__info_string8, inlined_at 2 183 25
 	.loc	4 97 13, function_name $L__info_string9, inlined_at 3 618 16
-	mov.u32 	%r21, %tid.z;
-	mov.u32 	%r22, %tid.y;
+	mov.u32 	%r21, %tid.z; // threadIdx.z #=0
+	mov.u32 	%r22, %tid.y; // threadIdx.y #=0
 	.loc	4 97 20, function_name $L__info_string9, inlined_at 3 618 16
 	.loc	4 78 9, function_name $L__info_string10, inlined_at 4 97 20
-	mad.lo.s32 	%r23, %r18, %r21, %r22;
-	mad.lo.s32 	%r24, %r23, %r1, %r15;
+	mad.lo.s32 	%r23, %r18, %r21, %r22; // blockDim.y * threadIdx.z + threadIdx.y =#0
+	mad.lo.s32 	%r24, %r23, %r1, %r15; // (blockDim.y * threadIdx.z + threadIdx.y) * blockDim.x + threadIdx.x #=threadIdx.x
 	.loc	2 185 21, function_name $L__info_string4, inlined_at 2 298 9
 	cvt.u64.u32 	%rd3, %r24;
 	.loc	2 185 5, function_name $L__info_string4, inlined_at 2 298 9
@@ -180,16 +180,16 @@ $L__BB0_6:
 	// end inline asm
 	.loc	1 52 5
 	mov.u32 	%r35, %nctaid.x;
-	mul.lo.s32 	%r4, %r1, %r35;
+	mul.lo.s32 	%r4, %r1, %r35; // blockDim.x * gridDim.x
 	.loc	1 54 5
-	add.s32 	%r69, %r34, %r4;
-	cvt.s64.s32 	%rd62, %r70;
-	setp.lt.u64 	%p22, %rd62, %rd26;
-	setp.ge.u64 	%p10, %rd62, %rd26;
+	add.s32 	%r69, %r34, %r4; // offset + blockDim.x * gridDim.x
+	cvt.s64.s32 	%rd62, %r70; // global index
+	setp.lt.u64 	%p22, %rd62, %rd26; // %p22 = global index < N
+	setp.ge.u64 	%p10, %rd62, %rd26; // %p10 = global index >= N
 	cvt.s64.s32 	%rd58, %r69;
-	setp.ge.u64 	%p11, %rd58, %rd26;
-	mov.u32 	%r72, 0;
-	or.pred  	%p12, %p10, %p11;
+	setp.ge.u64 	%p11, %rd58, %rd26; // %p11 = offset + blockDim.x * gridDim.x >= N
+	mov.u32 	%r72, 0; // stage
+	or.pred  	%p12, %p10, %p11; // !(global_index < N && offset < N)
 	@%p12 bra 	$L__BB0_15;
 
 	.loc	1 0 5
@@ -198,19 +198,19 @@ $L__BB0_6:
 
 $L__BB0_8:
 	.loc	1 55 9
-	add.s32 	%r37, %r69, 256;
+	add.s32 	%r37, %r69, 256; // %r37 = offset + 256
 	cvt.s64.s32 	%rd39, %r37;
-	setp.lt.u64 	%p13, %rd39, %rd26;
+	setp.lt.u64 	%p13, %rd39, %rd26; // %p13 = offset + 256 < N
 	cvt.u64.u32 	%rd40, %r69;
-	sub.s64 	%rd41, %rd26, %rd40;
-	selp.b64 	%rd42, 256, %rd41, %p13;
+	sub.s64 	%rd41, %rd26, %rd40; // N - offset
+	selp.b64 	%rd42, 256, %rd41, %p13; // %rd42 = offset + 256 < N ? 256 : N - offset
 	cvt.u32.u64 	%r38, %rd42;
 	.loc	1 56 9
-	setp.gt.s32 	%p14, %r38, 0;
+	setp.gt.s32 	%p14, %r38, 0; // %p14 = fetchSize > 0
 	.loc	1 58 9
-	xor.b32  	%r72, %r71, 1;
+	xor.b32  	%r72, %r71, 1; // stage ^= 1
 	and.b64  	%rd43, %rd42, 4294967295;
-	selp.b64 	%rd15, %rd43, 0, %p14;
+	selp.b64 	%rd15, %rd43, 0, %p14; // %rd15 = fetchSize > 0 ? fetchSize & 0xffffffff : 0
 	.loc	1 58 9
 	.loc	2 396 5, function_name $L__info_string0, inlined_at 1 58 9
 	.loc	2 356 5, function_name $L__info_string1, inlined_at 2 396 5
