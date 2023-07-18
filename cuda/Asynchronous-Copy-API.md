@@ -102,3 +102,6 @@ for (batch = 1; block_batch(batch) < N && block_batch(batch - 1) + threadIdx.x <
     }
 ```
 
+---
+
+![api](figures/api.png)
