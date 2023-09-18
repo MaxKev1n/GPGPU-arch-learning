@@ -1,5 +1,3 @@
-[TOC]
-
 # Accel-Sim
 
 * https://github.com/accel-sim/accel-sim-framework
@@ -11,7 +9,7 @@
 
 ```bash
 export CUDA_INSTALL_PATH=<your_cuda> 
-export PATH=$CUDA_INSTALL_PATH/bin:$PATH å
+export PATH=$CUDA_INSTALL_PATH/bin:$PATH
 source ./gpu-simulator/setup_environment.sh
 ```
 
