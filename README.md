@@ -114,9 +114,9 @@
 
 
 
-* **任务一：** 使用`cuda toolkit`编译`vecaddLoop.cu`得到`vecaddLoop.ptx`✅
-* **任务二：** 理解`vecaddLoop.ptx`✅
-* **任务三：** 使用`asm()`对`cube.cu`中的kernel插入Inline PTX Assembly✅
+* **任务一： 使用`cuda toolkit`编译`vecaddLoop.cu`得到`vecaddLoop.ptx`** ✅
+* **任务二： 理解`vecaddLoop.ptx`** ✅
+* **任务三： 使用`asm()`对`cube.cu`中的kernel插入Inline PTX Assembly** ✅
 
 ---
 
@@ -173,7 +173,7 @@ ANTT is a lower-is-better metric.
 
 <img src="nsight-compute/nsight-compute-ui.png" style="zoom: 50%;" />
 
-* **任务一：如何生成Report并查看Source与PTX对应关系**✅
+* **任务一：如何生成Report并查看Source与PTX对应关系** ✅
 
 
 
@@ -183,9 +183,9 @@ ANTT is a lower-is-better metric.
 
 
 
-* **任务一：如何查看kernel的occupancy**✅
+* **任务一：如何查看kernel的occupancy** ✅
 
-* **任务二：如何查看cuda代码对应的sass代码**✅
+* **任务二：如何查看cuda代码对应的sass代码** ✅
 
 
 
@@ -193,4 +193,49 @@ ANTT is a lower-is-better metric.
 
 ## Occupancy
 
-* **任务一：如何在cuda代码中计算theoretical occupancy**✅
+* **任务一：如何在cuda代码中计算theoretical occupancy** ✅
+
+---
+
+## Accel-Sim
+
+> Accel-Sim is a simulation framework for simulating and validating programmable accelerators like GPUs. For full details, please see our recent [ISCA 2020 paper](https://people.ece.ubc.ca/~aamodt/publications/papers/accelsim.isca2020.pdf) and download slides from [here](https://accel-sim.github.io/ISCA2020-presentation-v3.0.pptx).
+
+* Introduction: The Accel-Sim ISCA 2020 paper [[paper](https://www.iscaconf.org/isca2020/papers/466100a473.pdf), [slides](https://accel-sim.github.io/ISCA2020-presentation-v3.0.pptx), [video](https://drive.google.com/drive/folders/1Q4-y6QTzS_1JoRmTUV31QKpOES9ZY8oG?usp=sharing)]
+* Beginner guide and how to use: [Accel-Sim beginner manual](https://github.com/accel-sim/accel-sim-framework/blob/release/README.md)
+* Accel-Sim per-component manuals: 
+  - [Nvbit tracer](https://github.com/accel-sim/accel-sim-framework/blob/release/util/tracer_nvbit/README.md)
+  - [Collecting HW stats](https://github.com/accel-sim/accel-sim-framework/blob/release/util/hw_stats/README.md)
+  - [Collecting simulation stats](https://github.com/accel-sim/accel-sim-framework/blob/release/util/job_launching/README.md)
+  - [Correlator](https://github.com/accel-sim/accel-sim-framework/blob/release/util/plotting/README.md)
+  - [Tuner ](https://github.com/accel-sim/accel-sim-framework/tree/dev/util/tuner/README.md)
+  - [Accel-Sim's Trace-driven front-end](https://github.com/accel-sim/accel-sim-framework/blob/dev/gpu-simulator/README.md)
+* Performance model manual:
+  - Original GPGPU-Sim 3.x manual [[manual](http://gpgpu-sim.org/manual/index.php/Main_Page), [slides](http://www.gpgpu-sim.org/micro2012-tutorial/), [tutorial videos](https://www.youtube.com/channel/UCMZLxSL7Ibn6uCvwdZcGqFQ/videos)] 
+  - [GPGPU-Sim 4.x changes](https://github.com/accel-sim/accel-sim-framework/blob/dev/gpu-simulator/gpgpu-sim4.md)
+* Power model manual:
+  - [AccelWattch manual](https://accel-sim.github.io/accelwattch.html#manual)
+
+
+
+> ⚠️在Ubuntu 22.04上使用可能遇到`gcc`版本等问题
+>
+> 建议使用Accel-Sim提供的[docker image](https://hub.docker.com/repository/docker/accelsim/ubuntu-18.04_cuda-11)
+
+
+
+### Tasks
+
+#### Basic Tasks
+
+* **任务一： 尝试使用Accel-Sim trace-driven mode运行`rodinia_2.0`** ✅
+* **任务二： 尝试使用Accel-Sim PTX mode运行`rodinia_2.0`** ✅
+* **任务三： 尝试单独运行一个特殊的application**
+* **任务四： 尝试监视Accel-Sim benchmark batch running** ✅
+
+#### Advanced Tasks
+
+* **任务一： 目前的Accel-Sim使用round-robin的方式决定*CTA*如何分配到*Streaming Multiprocessor*。尝试修改CTA的分配方式，不断分配CTA到同一个Streaming Multiprocessor上，直到该Streaming Multiprocessor无法放置更多的CTA** ✅
+
+---
+
