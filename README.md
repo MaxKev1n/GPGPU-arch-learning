@@ -260,3 +260,56 @@ ANTT is a lower-is-better metric.
 
 
 
+版本控制的基本要求是学习以下命令的使用：
+
+```
+git add -p
+git commit
+git commit --amend
+git checkout an-existing-branch
+git checkout -b a-new-branch
+git checkout path/to/a/file
+
+git format-patch
+git apply
+git apply --check
+git am
+
+git rebase -i
+
+git rm
+git rm --cached
+
+git fetch
+
+git push
+
+git merge a-branch
+```
+
+
+
+如果要参与复杂的开源项目开发，你或许还需要掌握这些命令：
+
+```
+git reset -p
+git add -p
+git checkout -p
+
+git rebase a-branch
+git rebase a-commit
+git rebase --onto new-base-commit old-base-commit newest-modified-commit
+git cherry-pick
+
+git commit --fixup
+```
+
+
+
+⚠️记住：
+
+- 不要用`git add .`，最好用`git add -p`
+- 99%的情况，不要track log文件
+- 99%的情况，不要track binary文件
+
+---
