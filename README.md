@@ -1,5 +1,17 @@
 # GPGPU-arch-learning
 
+这是参考[Dr.Zhouyaoyang](https://github.com/shinezyy)的建立的[micro-arch-training](https://github.com/shinezyy/micro-arch-training)和[Zihang CHEN](https://github.com/MaxKev1n)建立的[micro-arch-learning](https://github.com/MaxKev1n/micro-arch-learning)，关于如何入门GPGPU architecture以及相关tools使用的仓库
+
+> micro-arch-learning的仓库只是一个学习过程的记录，并不是用于解答micro-arch-training的答案。micro-arch-training建立的目的并不是解决问题本身，而是学习解决过程的方法，成为一个**independent researcher**。
+
+
+
+> How to make undergraduates or new graduates ready for advanced computer architecture research or modern CPU design. 本项目的目的是让本科生或新入学的研究生迅速地可以参加体系结构研究或参与高性能处理器开发。
+>
+> ——@shinezyy
+
+
+
 ## MGPUSim
 
 **推荐课程：**[W&M CSCI780-01 Spring 23 Computer Arch. Mdl and Sim (notion.site)](https://syifan.notion.site/W-M-CSCI780-01-Spring-23-Computer-Arch-Mdl-and-Sim-a5102523b841499dbbd0ff893f8495a6)
@@ -238,4 +250,13 @@ ANTT is a lower-is-better metric.
 * **任务一： 目前的Accel-Sim使用round-robin的方式决定*CTA*如何分配到*Streaming Multiprocessor*。尝试修改CTA的分配方式，不断分配CTA到同一个Streaming Multiprocessor上，直到该Streaming Multiprocessor无法放置更多的CTA** ✅
 
 ---
+
+## Git
+
+**参考资料：**
+
+* https://github.com/shinezyy/micro-arch-training#version-control
+* https://zhuanlan.zhihu.com/p/526826127
+
+
 
