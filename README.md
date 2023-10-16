@@ -249,6 +249,12 @@ ANTT is a lower-is-better metric.
 
 * **任务一： 目前的Accel-Sim使用round-robin的方式决定*CTA*如何分配到*Streaming Multiprocessor*。尝试修改CTA的分配方式，不断分配CTA到同一个Streaming Multiprocessor上，直到该Streaming Multiprocessor无法放置更多的CTA** ✅
 
+
+
+> **Citation：** 
+>
+> M. Khairy, Z. Shen, T. M. Aamodt和T. G. Rogers, 《Accel-Sim: An Extensible Simulation Framework for Validated GPU Modeling》, 收入 *2020 ACM/IEEE 47th Annual International Symposium on Computer Architecture (ISCA)*, Valencia, Spain: IEEE, 5月 2020, 页 473–486. doi: [10.1109/ISCA45697.2020.00047](https://doi.org/10.1109/ISCA45697.2020.00047).
+
 ---
 
 ## Git
@@ -313,3 +319,4 @@ git commit --fixup
 - 99%的情况，不要track binary文件
 
 ---
+

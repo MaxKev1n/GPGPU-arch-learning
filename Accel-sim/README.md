@@ -108,3 +108,37 @@ export GPUAPPS_ROOT=$BINARYFILE_DIR
 > [GPGPU-Sim manual #SIMT_Cores](http://gpgpu-sim.org/manual/index.php/Main_Page#SIMT_Core_Clusters)
 
 默认情况下，每一个SIMT Core Cluster中包含一个SIMT core，即`m_config->n_simt_cores_per_cluster == 1`
+
+
+
+## Interconnect
+
+> We developed a fast built-in xbar interconnect instead of the complex Booksim-based xbar so the user can have more control and understanding of the interconnect. The user can switch between the built-in xbar and Booksim interconnect. The built-in xbar is a standard crossbar with iSLIP arbitration
+
+
+
+<img src="./image-20231016181814550.png" alt="image-20231016181814550" style="zoom:50%;" />
+
+<img src="./image-20231016181849404.png" alt="image-20231016181849404" style="zoom:50%;" />
+
+**Accel-Sim**使用了built-in xbar interconnect来代替Booksim-based xbar，但是built-in xbar并没有涉及不同node间的传输代价，因此我向built-in xbar中添加了interconnect latency。除此以外，由于GPGPUSim仅支持monolithic GPU simulation，为了模拟Multi-Chip-Module GPU，我在accel-sim的cluster层上添加了一层GPU Module并添加了对应的interconnect
+
+<img src="./image-20231016181922698.png" alt="image-20231016181922698" style="zoom:50%;" />
+
+
+
+## DRAM
+
+` -gpgpu_dram_timing_opt nbk:tCCD:tRRD:tRCD:tRAS:tRP:tRC:CL:WL:tCDLR:tWR`
+
+* nbk: number of banks
+* tCCD: Column to Column Delay (RD/WR to RD/WR different banks)
+* tRRD: Row to Row Delay (Active to Active different banks)
+* tRCD: Row to Column Delay (Active to RD/WR/RTR/WTR/LTR)
+* tRAS: Active to PRECHARGE command period
+* tRP: PRECHARGE command period 
+* tRC: Active to Active command period (same bank)
+* CL: CAS Latency (Column address strobe latency, also called CAS latency or CL, is **the delay in clock cycles between the READ command and the moment data is available**)
+* WL: WRITE latency
+* tCDLR: Last data-in to Read Delay (switching from write to read)
+* tWR: WRITE recovery time
