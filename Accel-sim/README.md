@@ -129,7 +129,9 @@ export GPUAPPS_ROOT=$BINARYFILE_DIR
 
 ## DRAM
 
-` -gpgpu_dram_timing_opt nbk:tCCD:tRRD:tRCD:tRAS:tRP:tRC:CL:WL:tCDLR:tWR`
+``` 
+-gpgpu_dram_timing_opt nbk:tCCD:tRRD:tRCD:tRAS:tRP:tRC:CL:WL:tCDLR:tWR
+```
 
 * nbk: number of banks
 * tCCD: Column to Column Delay (RD/WR to RD/WR different banks)
@@ -142,3 +144,33 @@ export GPUAPPS_ROOT=$BINARYFILE_DIR
 * WL: WRITE latency
 * tCDLR: Last data-in to Read Delay (switching from write to read)
 * tWR: WRITE recovery time
+
+
+
+```
+-gpgpu_mem_addr_mapping dramid@<start bit>;<memory address map>
+```
+
+Mapping memory address to DRAM model:
+
+* <start bit> = where the bits used to specify the DRAM channel ID starts. (This means the next Log2(#DRAM channel) bits will be used as the DRAM channel ID, and the whole address map will be shifted depending on how many bits are used.)
+* <memory address map> = a 64-character string specify how each bit in a memory address is decoded into row (R), column (C), bank (B) addresses. Part of the address that will be inside a single DRAM burst should be specified with (S).
+
+
+
+```
+for HBM, three stacks, 24 channles, each (128 bits) 16 bytes width
+```
+
+> **High Bandwidth Memory** (**HBM**) is a [computer memory](https://en.wikipedia.org/wiki/Computer_memory) interface for [3D-stacked](https://en.wikipedia.org/wiki/Three-dimensional_integrated_circuit) [synchronous dynamic random-access memory](https://en.wikipedia.org/wiki/Synchronous_dynamic_random-access_memory) (SDRAM) initially from [Samsung](https://en.wikipedia.org/wiki/Samsung_Electronics), [AMD](https://en.wikipedia.org/wiki/Advanced_Micro_Devices) and [SK Hynix](https://en.wikipedia.org/wiki/SK_Hynix).
+>
+> source: https://en.wikipedia.org/wiki/High_Bandwidth_Memory
+
+
+
+**In terms of DRAM Size**：
+
+* https://github.com/gpgpu-sim/gpgpu-sim_distribution/issues/71
+* https://github.com/gpgpu-sim/gpgpu-sim_distribution/pull/133
+* https://github.com/MaxKev1n/gpgpu-sim_distribution/commit/950464e7f8e512f2beb0c9e0883db3489bf84cec
+* 由这两个issue和一个commit可以基本判断DRAM Size仅由使用的`address_type`的类型长度决定
