@@ -131,6 +131,9 @@ export GPUAPPS_ROOT=$BINARYFILE_DIR
 
 ``` 
 -gpgpu_dram_timing_opt nbk:tCCD:tRRD:tRCD:tRAS:tRP:tRC:CL:WL:tCDLR:tWR
+
+-gpgpu_dram_timing_opt "nbk=16:CCD=1:RRD=3:RCD=12:RAS=28:RP=12:RC=40:
+                        CL=12:WL=2:CDLR=3:WR=10:nbkgrp=4:CCDL=2:RTPL=3"
 ```
 
 * nbk: number of banks
@@ -149,17 +152,21 @@ export GPUAPPS_ROOT=$BINARYFILE_DIR
 
 ```
 -gpgpu_mem_addr_mapping dramid@<start bit>;<memory address map>
+
+-gpgpu_mem_addr_mapping dramid@8;00000000.00000000.00000000.00000000.0000RRRR.RRRRRRRR.RBBBCCCB.CCCSSSSS
 ```
 
 Mapping memory address to DRAM model:
 
-* <start bit> = where the bits used to specify the DRAM channel ID starts. (This means the next Log2(#DRAM channel) bits will be used as the DRAM channel ID, and the whole address map will be shifted depending on how many bits are used.)
-* <memory address map> = a 64-character string specify how each bit in a memory address is decoded into row (R), column (C), bank (B) addresses. Part of the address that will be inside a single DRAM burst should be specified with (S).
+* start bit = where the bits used to specify the DRAM channel ID starts. (This means the next Log2(#DRAM channel) bits will be used as the DRAM channel ID, and the whole address map will be shifted depending on how many bits are used.)
+* memory address map = a 64-character string specify how each bit in a memory address is decoded into row (R), column (C), bank (B) addresses. Part of the address that will be inside a single DRAM burst should be specified with (S).
+
+* > 当收到了一个读请求和地址后，会连续取出这个地址周围几个连续地址上的数据，具体取几个就叫BL(Burst Length)，是可以随地址信号配置的。
 
 
 
 ```
-for HBM, three stacks, 24 channles, each (128 bits) 16 bytes width
+# for HBM, three stacks, 24 channles, each (128 bits) 16 bytes width
 ```
 
 > **High Bandwidth Memory** (**HBM**) is a [computer memory](https://en.wikipedia.org/wiki/Computer_memory) interface for [3D-stacked](https://en.wikipedia.org/wiki/Three-dimensional_integrated_circuit) [synchronous dynamic random-access memory](https://en.wikipedia.org/wiki/Synchronous_dynamic_random-access_memory) (SDRAM) initially from [Samsung](https://en.wikipedia.org/wiki/Samsung_Electronics), [AMD](https://en.wikipedia.org/wiki/Advanced_Micro_Devices) and [SK Hynix](https://en.wikipedia.org/wiki/SK_Hynix).
