@@ -181,3 +181,44 @@ Mapping memory address to DRAM model:
 * https://github.com/gpgpu-sim/gpgpu-sim_distribution/pull/133
 * https://github.com/MaxKev1n/gpgpu-sim_distribution/commit/950464e7f8e512f2beb0c9e0883db3489bf84cec
 * 由这两个issue和一个commit可以基本判断DRAM Size仅由使用的`address_type`的类型长度决定
+
+---
+
+# HPC
+
+**如何不使用容器进行操作？**
+
+1. 安装`makedepend`，如果源码编译失败，可以使用已经编译好的二进制文件
+
+```
+/hpc2hdd/home/zchen097/softwares/makedepend/bin
+```
+
+2. 加载CUDA并设置环境变量
+
+```
+module load cuda/11.3
+whereis nvcc
+export CUDA_INSTALL_PATH=$PATH_TO_CUDA_DIR
+```
+
+3. 安装python package并设置相关环境
+
+```
+pip3 install -r requirements -i https://pypi.tuna.tsinghua.edu.cn/simple
+source ./gpu-simulator/setup_environment.sh
+```
+
+4. 编译并运行任务
+
+```
+make -j -C ./gpu-simulator/
+./util/job_launching/run_simulations.py -B rodinia_2.0-ft -C QV100-SASS -T ./hw_run/traces/device-<device-num>/<cuda-version>/ -N myTest
+```
+
+5. 监视任务运行**（HPC存在bug，显示正在运行的任务为Failed/Error）**
+
+```
+./util/job_launching/monitor_func_test.py -v -N NAME
+```
+
