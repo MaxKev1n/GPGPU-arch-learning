@@ -22,14 +22,18 @@ hipcc vectoradd.hip --save-temps --offload-arch=gfx90a -mcode-object-version=4 -
 The following contents is the meanings of compilation flags:
 
 > --save-temps: generate the intermedaite files during the process of compilation.
+
 > --offload-arch: specify the instruction set architecture, e.g. --offload-arch=gfx908.
+
 > -mcode-object-version: specify the code object version of compiled executable file, e.g. -mcode-object-version=4. We recommend the programmer set the code object version to *4*, as we only implement code object version 2 and 4 in MGPUSim.
 
 3. **List files in executable file `vectoradd`**
 
 ```bash
 roc-obj-ls vectoradd
+```
 
+```bash
 1       host-x86_64-unknown-linux--       file://vectoradd#offset=12288&size=0
 1       hipv4-amdgcn-amd-amdhsa--gfx90a       file://vectoradd#offset=12288&size=31688
 ```
@@ -38,7 +42,9 @@ roc-obj-ls vectoradd
 
 ```bash
 roc-obj-extract file://vectoradd#offset=12288&size=31688
+```
 
+```bash
 vectoradd-offset12288-size71520.co
 ```
 
@@ -160,7 +166,9 @@ type KernelArgs struct {
 ## Reference
 
 [1] https://rocm.docs.amd.com/projects/install-on-linux/en/latest/install/detailed-install.html
+
 [2] https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/docker.html
+
 [3] https://github.com/sarchlab/mgpusim/blob/v4/doc/prepare_benchmarks.md#run-a-kernel
 
 ## Appendix
